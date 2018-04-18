@@ -1,0 +1,73 @@
+{% load django_markdown %}
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+{% include "blog/_layouts/header.html" %}
+
+<body>
+
+    <!-- Navigation -->
+    {% include "blog/_layouts/nav.html" %}
+
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header class="intro-header" style="background-image: url('{% static 'blog/img/home-bg.jpg' %}')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="site-heading">
+                        <h1>realhu.tk</h1>
+                        <hr class="small">
+                        <span class="subheading">Python/Java Programmer, Arch Linux Fan, Football Fan </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                {% block blog_entries %}
+                {% for object in object_list %}
+                <div class="post-preview">
+                    <a href="{% url 'blog:post' object.slug %}">
+                        <h2 class="post-title">
+                            {{ object.title }}
+                        </h2>
+                        <h3 class="post-subtitle">
+                           [ {{  object.tags.all|join:", " }} ]
+                        </h3>
+                    </a>
+                    <p class="post-meta">{{ object.created }} </p>
+                </div>
+                <hr>
+                {% endfor %}
+                {% endblock %}
+                <!-- Pager -->
+                {% if is_paginated %}
+                    <ul class="pager">
+                        {% if page_obj.has_previous %}
+                            <li class="previous">
+                                <a href="/?page={{ page_obj.previous_page_number }}">Previous Page</a>
+                            </li>
+                        {% endif %}
+                        {% if page_obj.has_next %}
+                            <li class="next">
+                                <a href="/?page={{ page_obj.next_page_number }}"> Next Page</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                {% endif  %}
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    {% include "blog/_layouts/footer.html" %}
+    </body>
+
+</html>
